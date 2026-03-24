@@ -12,3 +12,10 @@ def get_users():
 
 def create_user(payload): 
     return requests.post(f"{BASE_URL}/users/add", json=payload, headers=HEADERS)
+
+def put_user_data(user_id,payload):
+    return requests.put(f"{BASE_URL}/users/{id}")
+
+def Delete_user_data(user_id):
+    return requests.delete(f"{BASE_URL}/user/{id}")
+
