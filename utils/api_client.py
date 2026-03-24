@@ -10,5 +10,5 @@ HEADERS = {
 def get_users():
     return requests.get(f"{BASE_URL}/users?page=2", headers=HEADERS)
 
-def create_user(payload):   # ✅ FIXED (added parameter)
+def create_user(payload): 
     return requests.post(f"{BASE_URL}/users/add", json=payload, headers=HEADERS)

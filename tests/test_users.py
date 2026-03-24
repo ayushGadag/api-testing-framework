@@ -1,4 +1,4 @@
-from utils.api_client import get_users, create_user   # ✅ FIXED
+from utils.api_client import get_users, create_user  
 
 def test_get_users():
     response = get_users()
