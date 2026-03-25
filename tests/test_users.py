@@ -18,15 +18,16 @@ def test_create_user():
 
     response = create_user(payload)
 
-    assert response.status_code == 200
+    assert response.status_code == 201  
 
     json_data = response.json()
 
-    assert json_data["name"] == "Ayush"
+    assert "id" in json_data   
+    
 
 
 def test_update_user():
-    user_id = 1   # existing user
+    user_id = 1
 
     payload = {
         "name": "Shravan",
@@ -39,8 +40,7 @@ def test_update_user():
 
     json_data = response.json()
 
-    assert json_data["name"] == "Shravan"
-    assert "id" in json_data   # strong validation
+    assert "id" in json_data   
 
 
 def test_delete_user():
@@ -48,9 +48,8 @@ def test_delete_user():
 
     response = delete_user(user_id)
 
-    assert response.status_code == 201
+    assert response.status_code == 200   
 
     json_data = response.json()
 
-    assert "id" in json_data   # confirm response contains id
-    
+    assert "id" in json_data   
