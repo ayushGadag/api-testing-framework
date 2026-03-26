@@ -1,9 +1,10 @@
 import pytest
+import allure
 from jsonschema import validate
 from utils.api_client import get_users, create_user, update_user, delete_user
 
 
-#  Schema for validation
+# 🔥 Schema for validation
 user_schema = {
     "type": "object",
     "properties": {
@@ -13,22 +14,28 @@ user_schema = {
 }
 
 
+@allure.feature("User API")
+@allure.story("GET Users")
 def test_get_users():
-    response = get_users()
+    with allure.step("Send GET request"):
+        response = get_users()
 
-    assert response.status_code == 200
-    
+    with allure.step("Validate status code"):
+        assert response.status_code == 200
+
     json_data = response.json()
 
-    assert "users" in json_data
-    assert len(json_data["users"]) > 0   # bonus validation
+    with allure.step("Validate response data"):
+        assert "users" in json_data
+        assert len(json_data["users"]) > 0
 
 
-#  Data-driven testing (multiple inputs)
+@allure.feature("User API")
+@allure.story("Create User")
 @pytest.mark.parametrize("name, job", [
     ("Ayush", "QA Engineer"),
     ("Rahul", "Developer"),
-    ("shravani", "Tester")
+    ("Aman", "Tester")
 ])
 def test_create_user(name, job):
 
@@ -37,18 +44,21 @@ def test_create_user(name, job):
         "job": job
     }
 
-    response = create_user(payload)
+    with allure.step("Send POST request"):
+        response = create_user(payload)
 
-    assert response.status_code == 201
+    with allure.step("Validate status code"):
+        assert response.status_code == 201
 
     json_data = response.json()
 
-    assert "id" in json_data
+    with allure.step("Validate response structure"):
+        assert "id" in json_data
+        validate(instance=json_data, schema=user_schema)
 
-    # Schema validation
-    validate(instance=json_data, schema=user_schema)
 
-
+@allure.feature("User API")
+@allure.story("Update User")
 def test_update_user():
     user_id = 1
 
@@ -57,28 +67,32 @@ def test_update_user():
         "job": "Developer"
     }
 
-    response = update_user(user_id, payload)
+    with allure.step("Send PUT request"):
+        response = update_user(user_id, payload)
 
-    assert response.status_code == 200
+    with allure.step("Validate status code"):
+        assert response.status_code == 200
 
     json_data = response.json()
 
-    assert "id" in json_data
+    with allure.step("Validate response structure"):
+        assert "id" in json_data
+        validate(instance=json_data, schema=user_schema)
 
-    # Schema validation
-    validate(instance=json_data, schema=user_schema)
 
-
+@allure.feature("User API")
+@allure.story("Delete User")
 def test_delete_user():
     user_id = 1
 
-    response = delete_user(user_id)
+    with allure.step("Send DELETE request"):
+        response = delete_user(user_id)
 
-    assert response.status_code == 200
+    with allure.step("Validate status code"):
+        assert response.status_code == 200
 
     json_data = response.json()
 
-    assert "id" in json_data
-
-    # Schema validation
-    validate(instance=json_data, schema=user_schema)
+    with allure.step("Validate response structure"):
+        assert "id" in json_data
+        validate(instance=json_data, schema=user_schema)
